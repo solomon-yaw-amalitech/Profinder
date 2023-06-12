@@ -19,12 +19,32 @@ document.getElementById("search").addEventListener("submit",async function(event
    event.preventDefault();
 
    const username = document.querySelector("#findByUsername").value;
-   const profile = await getUser(username);
-   const repo = await getRepo(profile);
    
+   if(username.length>0){
+    document.querySelector(".loader").style.display ="block";
+    document.querySelector(".user-details").style.display ="none";
+    const profile = await getUser(username);
+  
     
-   showProfile(profile);
-   showRepos(repo);
+    document.querySelector(".loader").style.display ="none";
+    document.querySelector(".notFound").style.display ="none";
+
+    if(profile.message === "Not Found"){
+     document.querySelector(".notFound").style.display ="block";    
+     
+    }
+    else{
+       const repo = await getRepo(profile);
+      showProfile(profile);
+      showRepos(repo);
+      document.querySelector(".notFound").style.display ="none";
+      document.querySelector(".user-details").style.display ="flex";
+    }
+    
+    
+   }
+    
+   
       
 
 });
@@ -78,6 +98,8 @@ function showRepos(repo){
      </div>`
     }
     document.querySelector(".repos").insertAdjacentHTML("afterbegin",newHtml);
+    document.querySelector(".repositories__heading").style.display = "block"    ;
+    
 }
    
 /**             */
